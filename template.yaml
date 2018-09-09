@@ -51,4 +51,41 @@ Resources:
       DestinationCidrBlock: 0.0.0.0/0
       GatewayId: MyIGW
 
+  SecurityGroup:
+    Type: AWS::EC2::SecurityGroup
+    Properties:
+      GroupName: aws-network-basis
+      GroupDescription: "Security group for web server instance"
+      SecurityGroupIngress:
+        - CidrIp: 0.0.0.0/0
+          Description: "SSH"
+          FromProt: 22
+          IpProtocol: "tcp"
+          ToPort: 22
+      VpcId: !Ref VPC
+
+  # EC2: Webserver
+  EC2:
+    Type: AWS::EC2::Instance
+    Properties:
+      imageId: "ami-a77c30c1"
+      KeyName: "aws-network-basis"
+      InstanceType: "t2.micro"
+      NetworkInterfaces:
+        - AssociatePublicIpAddress: true
+          DeviceIndex: 0
+          DeleteOnTermination: true
+          PrivateIpAddress: 10.0.1.10
+          SubnetId: !Ref PublicSubnet
+          GroupSet: !Ref SecurityGroup
+      # strage
+      BlockDevicemappings:
+        - Devicename: /dev/xvda
+          Ebs:
+            VolumeType: standard
+            VolumeSize: 8
+            DeleteOnTermination: true
+      Tags:
+        - Key: Name
+          Value: "aws-network-basis-instance"
 
