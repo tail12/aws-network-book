@@ -79,7 +79,7 @@ Resources:
           SubnetId: !Ref PublicSubnet
           GroupSet: !Ref SecurityGroup
       # strage
-      BlockDevicemappings:
+      BlockDeviceMappings:
         - Devicename: /dev/xvda
           Ebs:
             VolumeType: standard
